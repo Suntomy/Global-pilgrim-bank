@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Pilgrim Bank - Customer Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Section -->
+        <div id="customer-login-section" class="login-container">
+            <div class="login-box">
+                <div class="bank-header">
+                    <h1>Global Pilgrim Bank</h1>
+                    <p>Customer Portal</p>
+                </div>
+                <div class="login-form">
+                    <h2>Customer Login</h2>
+                    <div class="form-group">
+                        <label>Account Number</label>
+                        <input type="text" id="customer-account" placeholder="Enter 10-digit account number">
+                    </div>
+                    <div class="form-group">
+                        <label>Serial Number</label>
+                        <input type="text" id="customer-serial" placeholder="Enter 2-letter + 8-digit serial number">
+                    </div>
+                    <button onclick="customerLogin()" class="btn-primary">Login</button>
+                    <div id="customer-login-error" class="error-message"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Dashboard -->
+        <div id="customer-dashboard-section" class="customer-dashboard" style="display: none;">
+            <!-- Header -->
+            <header class="customer-header">
+                <div class="header-left">
+                    <h1>Global Pilgrim Bank</h1>
+                    <p>Welcome, <span id="customer-name">Customer</span></p>
+                </div>
+                <div class="header-right">
+                    <button onclick="dailySync()" class="btn-sync">
+                        <i class="fas fa-sync"></i> Daily Sync
+                    </button>
+                    <button onclick="customerLogout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="customer-nav">
+                <button class="nav-tab active" onclick="showCustomerTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="nav-tab" onclick="showCustomerTab('transfer')">
+                    <i class="fas fa-exchange-alt"></i> Transfer
+                </button>
+                <button class="nav-tab" onclick="showCustomerTab('cards')">
+                    <i class="fas fa-credit-card"></i> Cards
+                </button>
+                <button class="nav-tab" onclick="showCustomerTab('transactions')">
+                    <i class="fas fa-history"></i> History
+                </button>
+                <button class="nav-tab" onclick="showCustomerTab('crypto')">
+                    <i class="fas fa-coins"></i> Crypto
+                </button>
+                <button class="nav-tab" onclick="showCustomerTab('profile')">
+                    <i class="fas fa-user"></i> Profile
+                </button>
+            </nav>
+
+            <!-- Dashboard Tab -->
+            <div id="customer-dashboard-tab" class="tab-content active">
+                <div class="balance-section">
+                    <div class="account-card">
+                        <div class="card-header">
+                            <h3>Account Balance</h3>
+                            <span class="account-number" id="display-account-number"></span>
+                        </div>
+                        <div class="balance-amount" id="customer-balance">$0.00</div>
+                        <div class="account-status" id="account-status">
+                            <i class="fas fa-exclamation-circle"></i> Account requires activation
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="action-card" onclick="showCustomerTab('transfer')">
+                        <i class="fas fa-paper-plane"></i>
+                        <h4>Send Money</h4>
+                    </div>
+                    <div class="action-card" onclick="showCustomerTab('cards')">
+                        <i class="fas fa-credit-card"></i>
+                        <h4>My Cards</h4>
+                    </div>
+                    <div class="action-card" onclick="showCustomerTab('crypto')">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Crypto</h4>
+                    </div>
+                    <div class="action-card" onclick="showCustomerTab('transactions')">
+                        <i class="fas fa-history"></i>
+                        <h4>History</h4>
+                    </div>
+                </div>
+
+                <div class="recent-transactions">
+                    <h3>Recent Transactions</h3>
+                    <div id="customer-recent-transactions" class="transaction-list"></div>
+                </div>
+            </div>
+
+            <!-- Transfer Tab -->
+            <div id="customer-transfer-tab" class="tab-content">
+                <div class="transfer-container">
+                    <div class="transfer-type-selector">
+                        <button class="transfer-type-btn active" onclick="selectTransferType('local')">Local Transfer</button>
+                        <button class="transfer-type-btn" onclick="selectTransferType('international')">International</button>
+                    </div>
+
+                    <form id="transfer-form" onsubmit="processTransfer(event)">
+                        <div class="form-group">
+                            <label>From Account</label>
+                            <input type="text" id="from-account" readonly value="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Recipient Account Number / IBAN</label>
+                            <input type="text" id="to-account" required placeholder="Enter recipient account number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Recipient Name</label>
+                            <input type="text" id="recipient-name" required placeholder="Enter recipient name">
+                        </div>
+                        
+                        <div class="form-group international-only" style="display: none;">
+                            <label>Bank Name</label>
+                            <input type="text" id="recipient-bank" placeholder="Enter bank name">
+                        </div>
+                        
+                        <div class="form-group international-only" style="display: none;">
+                            <label>SWIFT Code</label>
+                            <input type="text" id="swift-code" placeholder="Enter SWIFT/BIC code">
+                        </div>
+                        
+                        <div class="form-group international-only" style="display: none;">
+                            <label>Amount (USD)</label>
+                            <input type="number" step="0.01" id="transfer-amount" required placeholder="Enter amount">
+                        </div>
+                        
+                        <div class="form-group local-only">
+                            <label>Amount (NGN)</label>
+                            <input type="number" step="0.01" id="transfer-amount-local" required placeholder="Enter amount">
+                        </div>
+                        
+                        <div class="form-group international-only" style="display: none;">
+                            <label>Currency</label>
+                            <select id="transfer-currency">
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description / Purpose</label>
+                            <textarea id="transfer-description" rows="3" placeholder="Enter transaction description"></textarea>
+                        </div>
+                        
+                        <div class="transfer-summary" id="transfer-summary" style="display: none;">
+                            <h4>Transfer Summary</h4>
+                            <p>Amount: <span id="summary-amount">$0.00</span></p>
+                            <p>Fee: <span id="summary-fee">$0.00</span></p>
+                            <p>Total: <span id="summary-total">$0.00</span></p>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="submit-transfer" disabled>
+                            <i class="fas fa-paper-plane"></i> Send Money
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Cards Tab -->
+            <div id="customer-cards-tab" class="tab-content">
+                <div class="cards-container">
+                    <h3>Virtual Cards</h3>
+                    
+                    <div class="activation-notice" id="activation-notice">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Account must be activated by making a deposit from another bank before you can use cards.</p>
+                    </div>
+                    
+                    <div id="virtual-cards" class="virtual-cards-grid">
+                        <div class="virtual-card mastercard">
+                            <div class="card-header">
+                                <span class="card-type">Mastercard</span>
+                                <i class="fab fa-cc-mastercard"></i>
+                            </div>
+                            <div class="card-number">
+                                •••• •••• •••• 4532
+                            </div>
+                            <div class="card-details">
+                                <div class="card-holder">
+                                    <span>Card Holder</span>
+                                    <span id="card-holder-name">YOUR NAME</span>
+                                </div>
+                                <div class="card-expiry">
+                                    <span>Expiry</span>
+                                    <span>12/28</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="virtual-card visa">
+                            <div class="card-header">
+                                <span class="card-type">Visa</span>
+                                <i class="fab fa-cc-visa"></i>
+                            </div>
+                            <div class="card-number">
+                                •••• •••• •••• 8901
+                            </div>
+                            <div class="card-details">
+                                <div class="card-holder">
+                                    <span>Card Holder</span>
+                                    <span id="card-holder-name-visa">YOUR NAME</span>
+                                </div>
+                                <div class="card-expiry">
+                                    <span>Expiry</span>
+                                    <span>06/27</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="virtual-card verve">
+                            <div class="card-header">
+                                <span class="card-type">Verve</span>
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="card-number">
+                                •••• •••• •••• 2345
+                            </div>
+                            <div class="card-details">
+                                <div class="card-holder">
+                                    <span>Card Holder</span>
+                                    <span id="card-holder-name-verve">YOUR NAME</span>
+                                </div>
+                                <div class="card-expiry">
+                                    <span>Expiry</span>
+                                    <span>09/26</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="add-card-section">
+                        <button class="btn-primary">
+                            <i class="fas fa-plus"></i> Request New Card
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div id="customer-transactions-tab" class="tab-content">
+                <div class="transactions-history">
+                    <div class="history-header">
+                        <h3>Transaction History</h3>
+                        <div class="filters">
+                            <input type="date" id="filter-date">
+                            <select id="filter-type">
+                                <option value="all">All Types</option>
+                                <option value="transfer">Transfer</option>
+                                <option value="deposit">Deposit</option>
+                                <option value="withdrawal">Withdrawal</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="customer-transaction-list" class="transaction-list-container">
+                        <!-- Transactions will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crypto Tab -->
+            <div id="customer-crypto-tab" class="tab-content">
+                <div class="crypto-dashboard">
+                    <div class="crypto-balance">
+                        <h3>Pilgrim Coin Balance</h3>
+                        <p class="crypto-amount" id="customer-pilgrim-balance">0.00 PLC</p>
+                        <p class="crypto-value">$0.00 USD</p>
+                    </div>
+                    
+                    <div class="crypto-actions">
+                        <button class="btn-primary">
+                            <i class="fas fa-arrow-down"></i> Buy PLC
+                        </button>
+                        <button class="btn-success">
+                            <i class="fas fa-arrow-up"></i> Sell PLC
+                        </button>
+                        <button class="btn-warning">
+                            <i class="fas fa-exchange-alt"></i> Transfer
+                        </button>
+                    </div>
+                    
+                    <div class="crypto-wallet">
+                        <h4>Wallet Address</h4>
+                        <p id="customer-wallet-address" class="wallet-address">Not generated yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="customer-profile-tab" class="tab-content">
+                <div class="profile-section">
+                    <h3>My Profile</h3>
+                    
+                    <div class="profile-info">
+                        <div class="info-group">
+                            <label>Full Name</label>
+                            <p id="profile-name">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Account Number</label>
+                            <p id="profile-account">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Serial Number</label>
+                            <p id="profile-serial">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Email</label>
+                            <p id="profile-email">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Phone Number</label>
+                            <p id="profile-phone">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Address</label>
+                            <p id="profile-address">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>BVN Status</label>
+                            <p id="profile-bvn">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>NIN Status</label>
+                            <p id="profile-nin">-</p>
+                        </div>
+                        <div class="info-group">
+                            <label>Account Status</label>
+                            <p id="profile-status">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="account-activation" id="account-activation-section">
+                        <h4>Account Activation</h4>
+                        <p>To activate your account, make a deposit from another bank using:</p>
+                        <div class="activation-details">
+                            <p><strong>Bank Name:</strong> Global Pilgrim Bank</p>
+                            <p><strong>Account Number:</strong> <span id="activation-account-number"></span></p>
+                            <p><strong>Account Name:</strong> <span id="activation-account-name"></span></p>
+                        </div>
+                        <p class="note">Your account will be activated within 24 hours after deposit verification.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/customer.js"></script>
+</body>
+</html>

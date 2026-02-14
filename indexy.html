@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Pilgrim Bank - Crypto Mining</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="crypto-mining-app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1>Global Pilgrim Bank</h1>
+                <span class="subtitle">Crypto Mining & Trading Platform</span>
+            </div>
+            <div class="header-right">
+                <div class="owner-info">
+                    <span>Owner: Olawale Adegan95</span>
+                    <span>+2349030277275</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="crypto-nav">
+            <button class="nav-btn active" onclick="showSection('mining')">
+                <i class="fas fa-hammer"></i> Mining
+            </button>
+            <button class="nav-btn" onclick="showSection('wallets')">
+                <i class="fas fa-wallet"></i> Wallets
+            </button>
+            <button class="nav-btn" onclick="showSection('trading')">
+                <i class="fas fa-chart-line"></i> Trading
+            </button>
+            <button class="nav-btn" onclick="showSection('exchange')">
+                <i class="fas fa-exchange-alt"></i> Exchange
+            </button>
+        </nav>
+
+        <!-- Mining Section -->
+        <div id="mining-section" class="section active">
+            <div class="section-header">
+                <h2>Crypto Mining Dashboard</h2>
+                <p>Mine multiple cryptocurrencies and earn rewards</p>
+            </div>
+
+            <div class="mining-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Mined</h3>
+                        <p class="stat-value" id="total-mined">$0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3>Active Miners</h3>
+                        <p class="stat-value" id="active-miners">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="stat-info">
+                        <h3>Mining Rate</h3>
+                        <p class="stat-value">50 units/hr</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-info">
+                        <h3>Today's Profit</h3>
+                        <p class="stat-value" id="today-profit">$0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mining-grid">
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>Pilgrim Coin (PLC)</h3>
+                        <span class="coin-price">$0.50</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="plc-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="plc-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="plc-mined">0 PLC</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="plc-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('PLC')">Start Mining</button>
+                    </div>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>Bitcoin (BTC)</h3>
+                        <span class="coin-price">$67,450.00</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="btc-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="btc-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="btc-mined">0 BTC</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="btc-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('BTC')">Start Mining</button>
+                    </div>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>Ethereum (ETH)</h3>
+                        <span class="coin-price">$3,450.00</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="eth-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="eth-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="eth-mined">0 ETH</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="eth-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('ETH')">Start Mining</button>
+                    </div>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>US Dollar (USD)</h3>
+                        <span class="coin-price">$1.00</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="usd-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="usd-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="usd-mined">0 USD</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="usd-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('USD')">Start Mining</button>
+                    </div>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>Euro (EUR)</h3>
+                        <span class="coin-price">$1.08</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="eur-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="eur-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="eur-mined">0 EUR</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="eur-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('EUR')">Start Mining</button>
+                    </div>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-header">
+                        <h3>British Pound (GBP)</h3>
+                        <span class="coin-price">$1.27</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="wallet-display">
+                            <span>Wallet Address:</span>
+                            <code id="gbp-wallet-address">Generating...</code>
+                        </div>
+                        <div class="mining-status" id="gbp-mining-status">
+                            <span class="status-badge">Stopped</span>
+                        </div>
+                        <div class="mining-amount">
+                            <span>Mined: </span>
+                            <strong id="gbp-mined">0 GBP</strong>
+                        </div>
+                        <div class="mining-value">
+                            <span>Value: </span>
+                            <strong id="gbp-value">$0.00</strong>
+                        </div>
+                        <button class="btn-mine" onclick="startMining('GBP')">Start Mining</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auto-transfer-section">
+                <div class="section-header">
+                    <h3>Auto-Transfer to Main Balance</h3>
+                </div>
+                <div class="transfer-controls">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-transfer" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Automatically transfer mined funds to main balance</span>
+                </div>
+                <p class="note">Mined funds are automatically transferred to the main balance at the end of each mining cycle.</p>
+            </div>
+        </div>
+
+        <!-- Wallets Section -->
+        <div id="wallets-section" class="section">
+            <div class="section-header">
+                <h2>Crypto Wallets</h2>
+                <p>Manage your cryptocurrency wallets</p>
+            </div>
+
+            <div class="wallets-grid" id="wallets-grid">
+                <!-- Wallets will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Trading Section -->
+        <div id="trading-section" class="section">
+            <div class="section-header">
+                <h2>Crypto Trading</h2>
+                <p>Buy and sell cryptocurrencies</p>
+            </div>
+
+            <div class="trading-pairs">
+                <h3>Trading Pairs</h3>
+                <div class="pairs-grid">
+                    <div class="pair-card">
+                        <h4>PLC/USDT</h4>
+                        <p class="pair-price">$0.50</p>
+                        <p class="pair-change">+0.00%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                    <div class="pair-card">
+                        <h4>BTC/USDT</h4>
+                        <p class="pair-price">$67,450.00</p>
+                        <p class="pair-change">+1.23%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                    <div class="pair-card">
+                        <h4>ETH/USDT</h4>
+                        <p class="pair-price">$3,450.00</p>
+                        <p class="pair-change">+0.87%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                    <div class="pair-card">
+                        <h4>ETH/BTC</h4>
+                        <p class="pair-price">0.0512</p>
+                        <p class="pair-change">-0.34%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                    <div class="pair-card">
+                        <h4>Pilgrim/BTC</h4>
+                        <p class="pair-price">0.0000074</p>
+                        <p class="pair-change">+0.00%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                    <div class="pair-card">
+                        <h4>Pilgrim/ETH</h4>
+                        <p class="pair-price">0.000145</p>
+                        <p class="pair-change">+0.00%</p>
+                        <div class="pair-actions">
+                            <button class="btn-buy">Buy</button>
+                            <button class="btn-sell">Sell</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exchange Section -->
+        <div id="exchange-section" class="section">
+            <div class="section-header">
+                <h2>Currency Exchange</h2>
+                <p>Exchange between different cryptocurrencies and fiat currencies</p>
+            </div>
+
+            <div class="exchange-form">
+                <div class="form-group">
+                    <label>From Currency</label>
+                    <select id="from-currency">
+                        <option value="USD">USD - US Dollar</option>
+                        <option value="EUR">EUR - Euro</option>
+                        <option value="GBP">GBP - British Pound</option>
+                        <option value="NGN">NGN - Nigerian Naira</option>
+                        <option value="BTC">BTC - Bitcoin</option>
+                        <option value="ETH">ETH - Ethereum</option>
+                        <option value="PLC">PLC - Pilgrim Coin</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" step="0.00000001" id="exchange-amount" placeholder="Enter amount">
+                </div>
+
+                <div class="exchange-arrow">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+
+                <div class="form-group">
+                    <label>To Currency</label>
+                    <select id="to-currency">
+                        <option value="USD" selected>USD - US Dollar</option>
+                        <option value="EUR">EUR - Euro</option>
+                        <option value="GBP">GBP - British Pound</option>
+                        <option value="NGN">NGN - Nigerian Naira</option>
+                        <option value="BTC">BTC - Bitcoin</option>
+                        <option value="ETH">ETH - Ethereum</option>
+                        <option value="PLC">PLC - Pilgrim Coin</option>
+                    </select>
+                </div>
+
+                <div class="exchange-rate">
+                    <span>Exchange Rate:</span>
+                    <strong id="current-rate">1 USD = 1 USD</strong>
+                </div>
+
+                <div class="exchange-result">
+                    <span>You will receive:</span>
+                    <strong id="exchange-result">0.00</strong>
+                </div>
+
+                <button class="btn-exchange" onclick="processExchange()">Exchange</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/mining.js"></script>
+</body>
+</html>

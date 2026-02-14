@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Pilgrim Bank - Forex Trading</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="forex-trading-app">
+        <!-- Header -->
+        <header class="trading-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Global Pilgrim Bank</h1>
+                    <span class="subtitle">Forex Trading Platform</span>
+                </div>
+                <div class="header-right">
+                    <div class="account-info">
+                        <div class="info-item">
+                            <span class="label">Account:</span>
+                            <span class="value" id="account-number">GPB-000001</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Server:</span>
+                            <span class="value">MetaTrader 5</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Owner:</span>
+                            <span class="value">Olawale Adegan95</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Trading Dashboard -->
+        <div class="trading-dashboard">
+            <!-- Sidebar - Market Watch -->
+            <aside class="market-watch">
+                <div class="section-title">
+                    <h3>Market Watch</h3>
+                    <button class="btn-refresh" onclick="refreshMarketData()">
+                        <i class="fas fa-sync"></i>
+                    </button>
+                </div>
+                
+                <div class="market-pairs" id="market-pairs">
+                    <!-- Trading pairs will be dynamically loaded -->
+                </div>
+            </aside>
+
+            <!-- Main Trading Area -->
+            <main class="main-trading">
+                <!-- Balance Display -->
+                <div class="balance-display">
+                    <div class="balance-card main-balance">
+                        <h3>Trading Balance</h3>
+                        <p class="balance-value" id="trading-balance">$0.00</p>
+                    </div>
+                    <div class="balance-card profit-balance">
+                        <h3>Profit Balance</h3>
+                        <p class="balance-value" id="profit-balance">$0.00</p>
+                    </div>
+                    <div class="balance-card equity">
+                        <h3>Equity</h3>
+                        <p class="balance-value" id="equity">$0.00</p>
+                    </div>
+                    <div class="balance-card margin">
+                        <h3>Free Margin</h3>
+                        <p class="balance-value" id="free-margin">$0.00</p>
+                    </div>
+                </div>
+
+                <!-- Trading Terminal -->
+                <div class="trading-terminal">
+                    <div class="terminal-header">
+                        <h3>Trading Terminal</h3>
+                        <div class="terminal-controls">
+                            <button class="btn-auto" id="btn-auto-trading" onclick="toggleAutoTrading()">
+                                <i class="fas fa-robot"></i> Auto Trading: OFF
+                            </button>
+                            <button class="btn-manual" id="btn-manual-trading" onclick="toggleManualTrading()">
+                                <i class="fas fa-hand-pointer"></i> Manual: OFF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="terminal-content">
+                        <!-- Current Pair Info -->
+                        <div class="pair-info" id="pair-info">
+                            <div class="pair-header">
+                                <h4 id="selected-pair">EUR/USD</h4>
+                                <span class="pair-price" id="current-price">1.0850</span>
+                            </div>
+                            <div class="pair-details">
+                                <span>Bid: <strong id="bid-price">1.0849</strong></span>
+                                <span>Ask: <strong id="ask-price">1.0851</strong></span>
+                                <span>Spread: <strong id="spread">2 pips</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- Order Panel -->
+                        <div class="order-panel">
+                            <div class="order-type">
+                                <button class="order-btn buy" onclick="openOrder('buy')">
+                                    <i class="fas fa-arrow-up"></i> BUY
+                                </button>
+                                <button class="order-btn sell" onclick="openOrder('sell')">
+                                    <i class="fas fa-arrow-down"></i> SELL
+                                </button>
+                            </div>
+
+                            <div class="order-inputs">
+                                <div class="input-group">
+                                    <label>Volume (Lots) - Max: 50,000</label>
+                                    <input type="number" step="0.01" min="0.01" max="50000" value="0.01" id="order-volume">
+                                </div>
+                                <div class="input-group">
+                                    <label>Stop Loss</label>
+                                    <input type="number" step="0.0001" id="stop-loss" placeholder="Optional">
+                                </div>
+                                <div class="input-group">
+                                    <label>Take Profit</label>
+                                    <input type="number" step="0.0001" id="take-profit" placeholder="Optional">
+                                </div>
+                            </div>
+
+                            <div class="order-summary">
+                                <p>Required Margin: <strong id="required-margin">$0.00</strong></p>
+                                <p>Potential Profit: <strong id="potential-profit">$0.00</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Open Positions -->
+                <div class="open-positions">
+                    <div class="positions-header">
+                        <h3>Open Positions</h3>
+                        <button class="btn-close-all" onclick="closeAllPositions()">
+                            <i class="fas fa-times"></i> Close All
+                        </button>
+                    </div>
+                    <div class="positions-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Pair</th>
+                                    <th>Type</th>
+                                    <th>Volume</th>
+                                    <th>Open Price</th>
+                                    <th>Current Price</th>
+                                    <th>Profit/Loss</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positions-body">
+                                <tr>
+                                    <td colspan="8" style="text-align: center;">No open positions</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Trade History -->
+                <div class="trade-history">
+                    <h3>Trade History</h3>
+                    <div class="history-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Pair</th>
+                                    <th>Type</th>
+                                    <th>Volume</th>
+                                    <th>Open Price</th>
+                                    <th>Close Price</th>
+                                    <th>Profit/Loss</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <tr>
+                                    <td colspan="8" style="text-align: center;">No trade history</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <!-- Robot Trading -->
+                <div class="robot-section">
+                    <div class="section-title">
+                        <h3>Robot Trading</h3>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="robot-toggle" onchange="toggleRobot()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="robot-status" id="robot-status">
+                        <span class="status-badge">Inactive</span>
+                    </div>
+                    <div class="robot-stats">
+                        <p>Trades Today: <strong id="robot-trades">0</strong></p>
+                        <p>Win Rate: <strong id="win-rate">0%</strong></p>
+                        <p>Total Profit: <strong id="robot-profit">$0.00</strong></p>
+                    </div>
+                </div>
+
+                <!-- Signals -->
+                <div class="signals-section">
+                    <div class="section-title">
+                        <h3>Trading Signals</h3>
+                    </div>
+                    <div class="signals-list" id="signals-list">
+                        <!-- Signals will be dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- News -->
+                <div class="news-section">
+                    <div class="section-title">
+                        <h3>Market News</h3>
+                    </div>
+                    <div class="news-list" id="news-list">
+                        <!-- News will be dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- Account Info -->
+                <div class="account-section">
+                    <div class="section-title">
+                        <h3>Account Information</h3>
+                    </div>
+                    <div class="account-details">
+                        <p><strong>Account Type:</strong> Standard</p>
+                        <p><strong>Leverage:</strong> 1:100</p>
+                        <p><strong>Server:</strong> GlobalPilgrim-MT5</p>
+                        <p><strong>Broker:</strong> Global Pilgrim Bank</p>
+                        <p><strong>License:</strong> AGB999</p>
+                        <p><strong>Email:</strong> adegan95@gmail.com</p>
+                        <p><strong>Contact:</strong> +2349030277275</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Chart Modal -->
+        <div id="chart-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="chart-title">Chart</h3>
+                    <button class="close-btn" onclick="closeChart()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Chart for <strong id="chart-pair">EUR/USD</strong></p>
+                        <p style="font-size: 14px; color: #718096;">Real-time chart will be displayed here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/forex.js"></script>
+</body>
+</html>
